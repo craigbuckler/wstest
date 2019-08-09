@@ -1,0 +1,9 @@
+{
+  "script": "./app.js",
+  "ignore": [
+    ".git/*",
+    "node_modules/*",
+    "client/*"
+  ],
+  "verbose": false
+}

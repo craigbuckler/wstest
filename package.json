@@ -1,0 +1,26 @@
+{
+  "name": "wstest",
+  "version": "1.0.0",
+  "description": "simple web socket experiment",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./app.js",
+    "debug": "nodemon ./app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/craigbuckler/wstest.git"
+  },
+  "author": "Craig Buckler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/craigbuckler/wstest/issues"
+  },
+  "homepage": "https://github.com/craigbuckler/wstest#readme",
+  "dependencies": {
+    "compression": "1.7.4",
+    "express": "4.17.1",
+    "serve-favicon": "2.5.0",
+    "ws": "7.1.1"
+  }
+}
