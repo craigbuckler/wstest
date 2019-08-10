@@ -5,11 +5,8 @@ window.addEventListener('DOMContentLoaded', () => {
   // cache nodes
   for (let n in node) node[n] = document.getElementById(n);
 
-  // set user name
-  setName();
-
-  // start communication
-  wsStart();
+  // set user name and start communication
+  if (setName()) wsStart();
 
 });
 
@@ -21,7 +18,7 @@ function setName() {
 
   if (name) {
     node.name.value = name;
-    return;
+    return 1;
   }
 
   // generate a new name
@@ -32,6 +29,8 @@ function setName() {
   location.search =
     fore[ Math.floor(Math.random() * fore.length) ] +
     last[ Math.floor(Math.random() * last.length) ];
+
+  return 0;
 
 }
 
@@ -96,7 +95,7 @@ function wsStart() {
   }
 
   // change name
-  node.name.addEventListener('change', e => {
+  node.name.addEventListener('change', () => {
 
     let name = node.name.value.trim();
     if (name) location.search = name;

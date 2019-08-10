@@ -5,7 +5,7 @@
 const
   client = __dirname + '/client/',
 
-  //dev = ((process.env.NODE_ENV || 'development').trim().toLowerCase() === 'development'),
+  dev = ((process.env.NODE_ENV || 'development').trim().toLowerCase() === 'development'),
   portHttp = process.env.PORT || 3000,
 
   express = require('express'),
@@ -14,6 +14,13 @@ const
 // middleware
 app.use(require('compression')());
 app.use(require('serve-favicon')(client + 'favicon.ico'));
+app.use((req, res, next) => {
+
+  if (dev) res.append('Access-Control-Allow-Origin', '*'); // CORS local testing
+  res.append('Vary', 'X-Requested-With'); // HTTP/Ajax distinction
+  next();
+
+});
 app.use(express.static(client, { maxAge: 60000 }));
 
 // 404 error
@@ -34,7 +41,20 @@ const
   msgLog = [], maxLog = 30;
 
 
-server.on('connection', socket => {
+// add a message to the log
+function logAdd(msg) {
+  msgLog.push(msg);
+  if (msgLog.length > maxLog) msgLog.shift();
+}
+
+
+// client connected
+server.on('connection', (socket, req) => {
+
+  let
+    name = '',
+    host = req.headers.host,
+    ip = req.connection.remoteAddress;
 
   // send previous messages
   msgLog.forEach(msg => socket.send(msg));
@@ -42,13 +62,29 @@ server.on('connection', socket => {
   // announce connection
   socket.on('message', msg => {
 
-    // add to log
-    msgLog.push(msg);
-    if (msgLog.length > maxLog) msgLog.shift();
+    // define name
+    let m = JSON.parse(msg);
+    if (!name && m && m.name) {
+      name = m.name;
+      console.log(`${name} joined ${host} from ${ip}`);
+    }
+
+    logAdd(msg);
 
     // send to all
     broadcast(msg);
 
+  });
+
+  // closed
+  socket.on('close', () => {
+
+    let
+      msg = 'has left the building',
+      m = JSON.stringify({ name, msg });
+
+    logAdd(m);
+    broadcast(m);
   });
 
 });
