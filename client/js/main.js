@@ -40,7 +40,7 @@ function wsStart() {
 
   let
     port = parseInt(location.port, 10) + 1,
-    socket = new WebSocket(`ws://localhost:${port}`);
+    socket = new WebSocket(`ws://${location.hostname}:${port}`);
 
   // client registration
   socket.addEventListener('open', () => {

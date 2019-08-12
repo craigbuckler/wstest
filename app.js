@@ -41,13 +41,6 @@ const
   msgLog = [], maxLog = 30;
 
 
-// add a message to the log
-function logAdd(msg) {
-  msgLog.push(msg);
-  if (msgLog.length > maxLog) msgLog.shift();
-}
-
-
 // client connected
 server.on('connection', (socket, req) => {
 
@@ -69,9 +62,6 @@ server.on('connection', (socket, req) => {
       console.log(`${name} joined ${host} from ${ip}`);
     }
 
-    logAdd(msg);
-
-    // send to all
     broadcast(msg);
 
   });
@@ -83,7 +73,6 @@ server.on('connection', (socket, req) => {
       msg = 'has left the building',
       m = JSON.stringify({ name, msg });
 
-    logAdd(m);
     broadcast(m);
   });
 
@@ -93,6 +82,11 @@ server.on('connection', (socket, req) => {
 // broadcast message to all clients
 function broadcast(msg) {
 
+  // update log
+  msgLog.push(msg);
+  if (msgLog.length > maxLog) msgLog.shift();
+
+  // broadcast
   server.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) client.send(msg);
   });
