@@ -54,7 +54,6 @@ function wsStart() {
 
     // append name and message
     let
-      atEnd = node.chat.clientHeight + node.chat.scrollTop + 200 >= node.chat.scrollHeight,
       data = JSON.parse(evt.data),
       name = document.createElement('dt'),
       msg = document.createElement('dd');
@@ -62,10 +61,7 @@ function wsStart() {
     name.textContent = (data.name || 'anonymous') + ':';
     msg.textContent = data.msg || 'is quiet?';
     node.log.appendChild(name);
-    node.log.appendChild(msg);
-
-    // scroll on new message
-    if (atEnd) node.chat.scrollTo(0, node.chat.scrollHeight - node.chat.clientHeight);
+    node.log.appendChild(msg).scrollIntoView({ behavior: 'smooth' });
 
   });
 
