@@ -19,7 +19,7 @@
   "homepage": "https://github.com/craigbuckler/wstest#readme",
   "dependencies": {
     "compression": "1.7.4",
-    "express": "4.17.1",
+    "express": "4.19.2",
     "serve-favicon": "2.5.0",
     "ws": "7.1.1"
   }
